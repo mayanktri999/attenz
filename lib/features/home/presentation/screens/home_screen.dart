@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../mock/home_mock_data.dart';
 import '../widgets/overall_attendance_card.dart';
 import '../widgets/subject_attendance_card.dart';
 //import '../widgets/today_class_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
+   @override
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
