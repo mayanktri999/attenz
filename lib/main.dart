@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 
 void main() {
@@ -10,20 +12,15 @@ class AttenZ extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'AttenZ',
 
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-
       themeMode: ThemeMode.system,
 
-      home: const Scaffold(
-        body: Center(
-          child: Text('AttenZ'),
-        ),
-      ),
+      routerConfig: AppRouter.router,
     );
   }
 }

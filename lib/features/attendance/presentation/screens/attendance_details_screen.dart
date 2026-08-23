@@ -1,14 +1,23 @@
-
 import 'package:flutter/material.dart';
 
-class AttendenceDetailsScreen extends StatelessWidget {
-  const AttendenceDetailsScreen({super.key});
+class AttendanceDetailsScreen extends StatelessWidget {
+  final String subjectId;
+
+  const AttendanceDetailsScreen({
+    super.key,
+    required this.subjectId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Attendance - $subjectId'),
+      ),
       body: Center(
-        child: Text('Attendance Details'),
+        child: Text(
+          'Subject ID: $subjectId',
+        ),
       ),
     );
   }

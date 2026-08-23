@@ -45,8 +45,8 @@ class AppRouter {
           return const AttendanceScreen();
         },
       ),
-
-      //GoRoute(
+       
+      GoRoute(
         path: '/attendance/:subjectId',
         builder: (context, state) {
           final subjectId = state.pathParameters['subjectId']!;
@@ -55,7 +55,8 @@ class AppRouter {
             subjectId: subjectId,
           );
         },
-      ),//
+      ),
+      
 
       GoRoute(
         path: '/timetable',
