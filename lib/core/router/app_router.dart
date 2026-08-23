@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-
+import '../../core/router/main_shell.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
@@ -18,6 +18,44 @@ class AppRouter {
     initialLocation: '/splash',
 
     routes: [
+
+      ShellRoute(
+  builder: (context, state, child) {
+    return MainShell(
+      child: child,
+    );
+  },
+
+  routes: [
+    GoRoute(
+      path: '/home',
+      builder: (context, state) {
+        return const HomeScreen();
+      },
+    ),
+
+    GoRoute(
+      path: '/chat',
+      builder: (context, state) {
+        return const ChatScreen();
+      },
+    ),
+
+    GoRoute(
+      path: '/timetable',
+      builder: (context, state) {
+        return const TimetableScreen();
+      },
+    ),
+
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) {
+        return const ProfileScreen();
+      },
+    ),
+  ],
+),
       GoRoute(
         path: '/splash',
         builder: (context, state) {
@@ -45,6 +83,7 @@ class AppRouter {
           return const AttendanceScreen();
         },
       ),
+
        
       GoRoute(
         path: '/attendance/:subjectId',
