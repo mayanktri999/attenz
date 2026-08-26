@@ -1,30 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/features/auth/data/models/login_response.dart';
-import '/features/auth/data/providers/auth_provider.dart';
+import '../../../../core/network/api_client.dart';
+import '../auth_api.dart';
+import '../auth_repository.dart';
 
-final loginProvider =
-    AsyncNotifierProvider<LoginNotifier, LoginResponse?>(
-  LoginNotifier.new,
-);
+final authApiProvider = Provider<AuthApi>((ref) {
+  final dio = ref.watch(apiClientProvider);
 
-class LoginNotifier extends AsyncNotifier<LoginResponse?> {
-  @override
-  Future<LoginResponse?> build() async {
-    return null;
-  }
+  return AuthApi(dio);
+});
 
-  Future<void> login({
-    required String studentNumber,
-    required String password,
-  }) async {
-    state = const AsyncLoading();
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final api = ref.watch(authApiProvider);
 
-    state = await AsyncValue.guard(() async {
-      return ref.read(authRepositoryProvider).login(
-            studentNumber: studentNumber,
-            password: password,
-          );
-    });
-  }
-}
+  return AuthRepository(api);
+});

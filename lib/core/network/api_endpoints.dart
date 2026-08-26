@@ -1,7 +1,7 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const String baseUrl = 'http://10.0.2.2:8080/api/v1';
+  static const String baseUrl = 'https://erp-backend-1-gpyb.onrender.com/api';
 
   // Auth
   static const String login = '/auth/login';
