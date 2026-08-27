@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Text(
           'AttenZ',
           style: TextStyle(
-            fontSize: 32,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
           ),
         ),
