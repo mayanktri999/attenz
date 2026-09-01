@@ -1,20 +1,7 @@
-
-import 'models/login_response.dart';
-import 'auth_api.dart';
-
+// Auth Repository placeholder.
+//
+// There is no student authentication API in the current backend.
+// Retained as a stub for future student auth implementation.
 class AuthRepository {
-  final AuthApi api;
-
-  AuthRepository(this.api);
-Future<LoginResponse> login({
-  required String studentNumber,
-  required String password,
-}) async {
-  final response = await api.login(
-    studentNumber: studentNumber,
-    password: password,
-  );
-
-  return LoginResponse.fromJson(response);
-}
+  // No student auth logic currently implemented.
 }

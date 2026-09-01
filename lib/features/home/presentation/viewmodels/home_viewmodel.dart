@@ -1,25 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/home_data_model.dart';
-import '../../data/repositories/home_repository.dart';
+import '/features/attendance/data/models/attendance_model.dart';
+import '/features/attendance/data/providers/attendance_providers.dart';
 
-class HomeViewModel
-    extends AsyncNotifier<HomeDataModel> {
-
-  late final HomeRepository _repository;
-
+/// ViewModel for the Home screen.
+///
+/// Exposes [AttendanceModel] directly from the attendance provider.
+/// The UI reads real backend data — no mock data is used.
+class HomeViewModel extends AsyncNotifier<AttendanceModel> {
   @override
-  Future<HomeDataModel> build() async {
-    _repository = HomeRepository();
-
-    return _repository.getHomeData();
+  Future<AttendanceModel> build() async {
+    // Watch the attendance provider — automatically re-builds
+    // when the student number changes or when invalidated.
+    return ref.watch(attendanceProvider.future);
   }
 
+  /// Invalidates the attendance provider to trigger a fresh network request.
   Future<void> refreshHome() async {
     state = const AsyncLoading();
-
+    ref.invalidate(attendanceProvider);
     state = await AsyncValue.guard(
-      () => _repository.getHomeData(),
+      () => ref.read(attendanceProvider.future),
     );
   }
 }

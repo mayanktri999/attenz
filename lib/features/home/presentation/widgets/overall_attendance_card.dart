@@ -6,10 +6,14 @@ import '../../../../core/utils/attendance_utils.dart';
 
 class OverallAttendanceCard extends StatelessWidget {
   final double percentage;
+  final int presentClasses;
+  final int totalClasses;
 
   const OverallAttendanceCard({
     super.key,
     required this.percentage,
+    required this.presentClasses,
+    required this.totalClasses,
   });
 
   @override
@@ -35,9 +39,7 @@ class OverallAttendanceCard extends StatelessWidget {
 
           Text(
             '${percentage.toInt()}%',
-            style: AppTypography.percentage.copyWith(
-              color: color,
-            ),
+            style: AppTypography.percentage.copyWith(color: color),
           ),
 
           const SizedBox(height: 8),
@@ -59,8 +61,71 @@ class OverallAttendanceCard extends StatelessWidget {
               ),
             ),
           ),
+
+          const SizedBox(height: 20),
+
+          const Divider(height: 1),
+
+          const SizedBox(height: 16),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _StatItem(
+                label: 'Present',
+                value: '$presentClasses',
+                color: AppColors.attendanceGreen,
+              ),
+              _StatItem(
+                label: 'Total',
+                value: '$totalClasses',
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              _StatItem(
+                label: 'Missed',
+                value: '${totalClasses - presentClasses}',
+                color: AppColors.attendanceRed,
+              ),
+            ],
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+
+  const _StatItem({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+      ],
     );
   }
 }

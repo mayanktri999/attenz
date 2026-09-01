@@ -1,17 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../core/network/api_client.dart';
-import '/features/auth/data/auth_api.dart';
-import '/features/auth/data/auth_repository.dart';
-
-final authApiProvider = Provider<AuthApi>((ref) {
-  final dio = ref.watch(apiClientProvider);
-
-  return AuthApi(dio);
-});
-
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final api = ref.watch(authApiProvider);
-
-  return AuthRepository(api);
-});
+// Network-level providers.
+//
+// The primary Dio instance is provided by [apiClientProvider] in api_client.dart.
+//
+// Feature-specific providers (attendance, etc.) are defined in their
+// respective feature/data/providers directories.
+//
+// Auth providers have been removed because there is no student
+// authentication API in the current backend.

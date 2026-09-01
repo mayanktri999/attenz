@@ -1,24 +1,10 @@
-import 'package:dio/dio.dart';
-
-import '/core/network/api_endpoints.dart';
-
+// Auth API placeholder.
+//
+// There is no student authentication API in the current backend.
+// Student login is handled by storing the student number locally
+// via [currentStudentNumberProvider].
+//
+// This file is retained for future student auth implementation.
 class AuthApi {
-  final Dio dio;
-
-  AuthApi(this.dio);
-
-  Future<Map<String, dynamic>> login({
-    required String studentNumber,
-    required String password,
-  }) async {
-    final response = await dio.post(
-      ApiEndpoints.login,
-      data: {
-        'student_number': studentNumber,
-        'password': password,
-      },
-    );
-
-    return Map<String, dynamic>.from(response.data);
-  }
+  // No student auth endpoints are currently available.
 }

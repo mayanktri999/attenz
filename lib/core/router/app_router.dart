@@ -18,122 +18,68 @@ class AppRouter {
     initialLocation: '/splash',
 
     routes: [
-
-      ShellRoute(
-  builder: (context, state, child) {
-    return MainShell(
-      child: child,
-    );
-  },
-
-  routes: [
-    GoRoute(
-      path: '/home',
-      builder: (context, state) {
-        return const HomeScreen();
-      },
-    ),
-
-    GoRoute(
-      path: '/chat',
-      builder: (context, state) {
-        return const ChatScreen();
-      },
-    ),
-
-    GoRoute(
-      path: '/timetable',
-      builder: (context, state) {
-        return const TimetableScreen();
-      },
-    ),
-
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) {
-        return const ProfileScreen();
-      },
-    ),
-  ],
-),
+      // ── Auth routes (no bottom nav shell) ─────────────────────
       GoRoute(
         path: '/splash',
-        builder: (context, state) {
-          return const SplashScreen();
-        },
+        builder: (context, state) => const SplashScreen(),
       ),
 
       GoRoute(
         path: '/login',
-        builder: (context, state) {
-          return const LoginScreen();
-        },
-      ),
-
-      GoRoute(
-        path: '/home',
-        builder: (context, state) {
-          return const HomeScreen();
-        },
-      ),
-
-      GoRoute(
-        path: '/attendance',
-        builder: (context, state) {
-          return const AttendanceScreen();
-        },
-      ),
-
-       
-      GoRoute(
-        path: '/attendance/:subjectId',
-        builder: (context, state) {
-          final subjectId = state.pathParameters['subjectId']!;
-
-          return AttendanceDetailsScreen(
-            subjectId: subjectId,
-          );
-        },
-      ),
-      
-
-      GoRoute(
-        path: '/timetable',
-        builder: (context, state) {
-          return const TimetableScreen();
-        },
-      ),
-
-      GoRoute(
-        path: '/chat',
-        builder: (context, state) {
-          return const ChatScreen();
-        },
-      ),
-
-      GoRoute(
-        path: '/chat/:groupId',
-        builder: (context, state) {
-          final groupId = state.pathParameters['groupId']!;
-
-          return GroupChatScreen(
-            groupId: groupId,
-          );
-        },
-      ),
-
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) {
-          return const ProfileScreen();
-        },
+        builder: (context, state) => const LoginScreen(),
       ),
 
       GoRoute(
         path: '/settings',
-        builder: (context, state) {
-          return const SettingsScreen();
-        },
+        builder: (context, state) => const SettingsScreen(),
+      ),
+
+      // ── Main shell (bottom nav) ────────────────────────────────
+      ShellRoute(
+        builder: (context, state, child) => MainShell(child: child),
+
+        routes: [
+          GoRoute(
+            path: '/home',
+            builder: (context, state) => const HomeScreen(),
+          ),
+
+          GoRoute(
+            path: '/attendance',
+            builder: (context, state) => const AttendanceScreen(),
+          ),
+
+          GoRoute(
+            path: '/attendance/:subjectId',
+            builder: (context, state) {
+              final subjectId = state.pathParameters['subjectId']!;
+              return AttendanceDetailsScreen(subjectId: subjectId);
+            },
+          ),
+
+          GoRoute(
+            path: '/chat',
+            builder: (context, state) => const ChatScreen(),
+          ),
+
+          GoRoute(
+            path: '/chat/:groupId',
+            builder: (context, state) {
+              final groupId = state.pathParameters['groupId']!;
+              return GroupChatScreen(groupId: groupId);
+            },
+          ),
+
+          GoRoute(
+            path: '/timetable',
+            builder: (context, state) => const TimetableScreen(),
+          ),
+
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const ProfileScreen(),
+          ),
+        ],
       ),
     ],
   );

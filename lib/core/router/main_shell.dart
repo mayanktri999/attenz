@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../theme/app_colors.dart';
+
 class MainShell extends StatelessWidget {
   final Widget child;
 
-  const MainShell({
-    super.key,
-    required this.child,
-  });
+  const MainShell({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
 
     int currentIndex = 0;
-
     if (location.startsWith('/chat')) {
       currentIndex = 1;
     } else if (location.startsWith('/timetable')) {
@@ -28,49 +26,43 @@ class MainShell extends StatelessWidget {
 
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
+        indicatorColor: AppColors.primary.withValues(alpha: 0.12),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
 
         onDestinationSelected: (index) {
           switch (index) {
             case 0:
               context.go('/home');
-              break;
-
             case 1:
               context.go('/chat');
-              break;
-
             case 2:
               context.go('/timetable');
-              break;
-
             case 3:
               context.go('/profile');
-              break;
           }
         },
 
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home, color: AppColors.primary),
             label: 'Home',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.chat_bubble_outline),
-            selectedIcon: Icon(Icons.chat_bubble),
+            selectedIcon:
+                Icon(Icons.chat_bubble, color: AppColors.primary),
             label: 'Chat',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month),
+            selectedIcon:
+                Icon(Icons.calendar_month, color: AppColors.primary),
             label: 'Timetable',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
+            selectedIcon: Icon(Icons.person, color: AppColors.primary),
             label: 'Profile',
           ),
         ],

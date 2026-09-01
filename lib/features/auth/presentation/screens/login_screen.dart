@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dio/dio.dart';
-import '/features/auth/data/providers/auth_provider.dart';
 
+import '/features/student/providers/current_student_provider.dart';
+
+/// Login screen — identity/session selection only.
+///
+/// There is currently no student authentication API.
+/// This screen captures the student number, stores it in
+/// [currentStudentNumberProvider], and navigates to Home.
+///
+/// No password is collected or sent anywhere.
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -13,21 +20,15 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _studentNumberController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  bool _obscurePassword = true;
-  bool _isLoading = false;
 
   @override
   void dispose() {
     _studentNumberController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _login() async {
+  void _login() {
     final studentNumber = _studentNumberController.text.trim();
-    final password = _passwordController.text;
 
     if (studentNumber.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -38,80 +39,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    if (password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your ERP password'),
-        ),
-      );
-      return;
-    }
+    // Store student number in session state — no API call made.
+    ref.read(currentStudentNumberProvider.notifier).setStudentNumber(studentNumber);
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final authApi = ref.read(authApiProvider);
-
-      final result = await authApi.login(
-        studentNumber: studentNumber,
-        password: password,
-      );
-
-      debugPrint('LOGIN RESPONSE: $result');
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login successful'),
-        ),
-      );
-
-      context.go('/home');
-    } on DioException catch (e) {
-      if (!mounted) return;
-
-      String message = 'Login failed';
-
-      if (e.response?.statusCode == 401) {
-        message = 'Invalid student number or password';
-      } else if (e.response?.statusCode == 400) {
-        message = 'Invalid login request';
-      } else if (e.response != null) {
-        message =
-            'Login failed (${e.response?.statusCode})';
-      } else if (e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout) {
-        message = 'Server took too long to respond';
-      } else if (e.type == DioExceptionType.connectionError) {
-        message = 'Could not connect to server';
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
-      );
-
-      debugPrint('LOGIN ERROR: ${e.message}');
-      debugPrint('LOGIN RESPONSE: ${e.response?.data}');
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Something went wrong: $e'),
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    context.go('/home');
   }
 
   @override
@@ -139,10 +70,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 8),
 
               const Text(
-                'Login using your college ERP credentials',
-                style: TextStyle(
-                  fontSize: 15,
-                ),
+                'Enter your student number to continue',
+                style: TextStyle(fontSize: 15),
               ),
 
               const SizedBox(height: 40),
@@ -150,7 +79,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               TextField(
                 controller: _studentNumberController,
                 keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _login(),
                 decoration: const InputDecoration(
                   labelText: 'Student Number',
                   hintText: 'Enter your student number',
@@ -159,53 +89,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _login(),
-                decoration: InputDecoration(
-                  labelText: 'ERP Password',
-                  hintText: 'Enter your ERP password',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-                ),
-              ),
-
               const SizedBox(height: 30),
 
               SizedBox(
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: _isLoading ? null : _login,
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 22,
-                          width: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
+                  onPressed: _login,
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ],
