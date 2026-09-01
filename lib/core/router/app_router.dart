@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+
 import '../../core/router/main_shell.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -6,8 +7,7 @@ import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/attendance/presentation/screens/attendance_screen.dart';
 import '../../features/attendance/presentation/screens/attendance_details_screen.dart';
 import '../../features/timetable/presentation/screens/timetable_screen.dart';
-import '../../features/chat/presentation/screens/chat_screen.dart';
-import '../../features/chat/presentation/screens/group_chat_screen.dart';
+import '../../features/store/presentation/screens/store_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/settings_screen.dart';
 
@@ -16,7 +16,6 @@ class AppRouter {
 
   static final router = GoRouter(
     initialLocation: '/splash',
-
     routes: [
       // ── Auth routes (no bottom nav shell) ─────────────────────
       GoRoute(
@@ -24,10 +23,7 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
 
       GoRoute(
         path: '/settings',
@@ -58,15 +54,15 @@ class AppRouter {
           ),
 
           GoRoute(
-            path: '/chat',
-            builder: (context, state) => const ChatScreen(),
+            path: '/store',
+            builder: (context, state) => const StoreScreen(),
           ),
 
           GoRoute(
-            path: '/chat/:groupId',
+            path: '/store/:subjectCode',
             builder: (context, state) {
-              final groupId = state.pathParameters['groupId']!;
-              return GroupChatScreen(groupId: groupId);
+              final subjectCode = state.pathParameters['subjectCode']!;
+              return SubjectStoreScreen(subjectCode: subjectCode);
             },
           ),
 

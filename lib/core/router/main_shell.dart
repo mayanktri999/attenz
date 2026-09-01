@@ -13,7 +13,7 @@ class MainShell extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
 
     int currentIndex = 0;
-    if (location.startsWith('/chat')) {
+    if (location.startsWith('/store')) {
       currentIndex = 1;
     } else if (location.startsWith('/timetable')) {
       currentIndex = 2;
@@ -33,12 +33,16 @@ class MainShell extends StatelessWidget {
           switch (index) {
             case 0:
               context.go('/home');
+              break;
             case 1:
-              context.go('/chat');
+              context.go('/store');
+              break;
             case 2:
               context.go('/timetable');
+              break;
             case 3:
               context.go('/profile');
+              break;
           }
         },
 
@@ -49,15 +53,13 @@ class MainShell extends StatelessWidget {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.chat_bubble_outline),
-            selectedIcon:
-                Icon(Icons.chat_bubble, color: AppColors.primary),
-            label: 'Chat',
+            icon: Icon(Icons.store_outlined),
+            selectedIcon: Icon(Icons.store, color: AppColors.primary),
+            label: 'Store',
           ),
           NavigationDestination(
             icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon:
-                Icon(Icons.calendar_month, color: AppColors.primary),
+            selectedIcon: Icon(Icons.calendar_month, color: AppColors.primary),
             label: 'Timetable',
           ),
           NavigationDestination(

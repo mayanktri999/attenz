@@ -27,30 +27,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void _login() {
+  Future<void> _login() async {
     final studentNumber = _studentNumberController.text.trim();
 
     if (studentNumber.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your student number'),
-        ),
+        const SnackBar(content: Text('Please enter your student number')),
       );
       return;
     }
 
-    // Store student number in session state — no API call made.
-    ref.read(currentStudentNumberProvider.notifier).setStudentNumber(studentNumber);
+    await ref
+        .read(currentStudentNumberProvider.notifier)
+        .setStudentNumber(studentNumber);
 
-    context.go('/home');
+    if (!mounted) return;
+    context.replace('/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -61,10 +59,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
               const Text(
                 'Welcome to AttenZ',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 8),
@@ -95,10 +90,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 height: 52,
                 child: ElevatedButton(
                   onPressed: _login,
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  child: const Text('Continue', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],

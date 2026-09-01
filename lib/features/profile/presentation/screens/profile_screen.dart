@@ -15,8 +15,7 @@ class ProfileScreen extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.darkBackground : AppColors.background,
+      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
       body: SafeArea(
         child: attendanceAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -102,13 +101,12 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  static void _signOut(BuildContext context, WidgetRef ref) {
-    showDialog<bool>(
+  static Future<void> _signOut(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Sign out'),
-        content: const Text(
-            'Are you sure you want to sign out?'),
+        content: const Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -123,12 +121,14 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ],
       ),
-    ).then((confirmed) {
-      if (confirmed == true && context.mounted) {
-        ref.read(currentStudentNumberProvider.notifier).clear();
-        context.go('/login');
+    );
+
+    if (confirmed == true && context.mounted) {
+      await ref.read(currentStudentNumberProvider.notifier).clear();
+      if (context.mounted) {
+        GoRouter.of(context).go('/login');
       }
-    });
+    }
   }
 
   static String _capitalize(String s) =>
@@ -189,8 +189,9 @@ class _ProfileShell extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.25),
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        width: 2),
+                      color: Colors.white.withValues(alpha: 0.6),
+                      width: 2,
+                    ),
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -219,10 +220,7 @@ class _ProfileShell extends StatelessWidget {
 
                 const Text(
                   'B.Tech CS · Section CS-2 · Sem V',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 13),
                 ),
               ],
             ),
@@ -240,8 +238,7 @@ class _ProfileShell extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color:
-                        Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -278,7 +275,8 @@ class _ProfileShell extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                   side: BorderSide(
-                      color: AppColors.attendanceRed.withValues(alpha: 0.3)),
+                    color: AppColors.attendanceRed.withValues(alpha: 0.3),
+                  ),
                 ),
               ),
               icon: const Icon(Icons.logout_outlined),
@@ -313,11 +311,7 @@ class _InfoRow extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(
-              item.icon,
-              size: 18,
-              color: AppColors.primary,
-            ),
+            child: Icon(item.icon, size: 18, color: AppColors.primary),
           ),
           const SizedBox(width: 14),
           Expanded(
